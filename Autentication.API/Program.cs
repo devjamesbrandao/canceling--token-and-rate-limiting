@@ -1,28 +1,19 @@
-using System.Text;
 using Autentication.API.Configuration;
 using Autentication.API.Middleware;
-using Autentication.Core.DTO;
-using Autentication.Core.Interfaces;
-using Autentication.Core.Services;
-using Autentication.Infrastructure.Persistence.Context;
-using Autentication.Infrastructure.Repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ResolveDependencies();
+builder.Services.ResolveDependencies(builder.Configuration);
 
 builder.Services.AddSwaggerConfig();
 
-builder.Services.AddAutenticationJWTConfig();
+builder.Services.AddAutenticationJWTConfig(builder.Configuration);
 
 var app = builder.Build();
 
 DbMigrationHelpers.MigrateAsync(app).Wait();
 
-app.UseSwaggerConfig();
+app.UseSwaggerConfig(app.Environment);
 
 app.MapControllers();
 
