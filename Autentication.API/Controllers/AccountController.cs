@@ -8,7 +8,7 @@ namespace Autentication.API.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("v1/api/[controller]")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -23,6 +23,23 @@ namespace Autentication.API.Controllers
             _tokenManager = tokenManager;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de requisição:
+        /// 
+        ///     [GET] v1/api/Account/account
+        /// </remarks>
+        /// <response code="200">
+        /// Funcionário está logado.
+        /// </response>   
+        /// <response code="401">
+        /// Funcionário não está logado.
+        /// </response>   
+        /// <response code="500">
+        /// Erro inesperado na aplicação.
+        /// </response>   
         [HttpGet("account")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -42,7 +59,24 @@ namespace Autentication.API.Controllers
             return NoContent();
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// Exemplo de requisição:
+        /// 
+        ///     [POST] v1/api/
+        ///     {        
+        ///       "userName": "test"
+        ///     }
+        /// </remarks>
+        /// <param name="credenciais"></param> 
+        /// <response code="400">
+        /// Possíveis erros: "Usuário ou senha inválidos"; "Funcionário não possui codLoja cadastrado."; 
+        /// </response>    
+        /// <response code="500">
+        /// Erro inesperado na aplicação 
+        /// </response>   
         [HttpPost("sign-in")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(JsonWebToken), StatusCodes.Status200OK)]
