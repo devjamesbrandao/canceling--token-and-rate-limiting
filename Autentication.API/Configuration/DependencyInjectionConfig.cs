@@ -1,8 +1,15 @@
+using Autentication.API.Middleware;
+using Autentication.Core.Interfaces;
+using Autentication.Core.Services;
+using Autentication.Infrastructure.Persistence.Context;
+using Autentication.Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
+
 namespace Autentication.API.Configuration
 {
     public static class DependencyInjectionConfig
     {
-        public static IServiceCollection ResolveDependencies(this IServiceCollection services)
+        public static IServiceCollection ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllers();
 
@@ -11,7 +18,7 @@ namespace Autentication.API.Configuration
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<AutenticationContext>(
-                x => x.UseSqlite(builder.Configuration["SqlLiteConnection:SqliteConnectionString"])
+                x => x.UseSqlite(configuration["SqlLiteConnection:SqliteConnectionString"])
                 .LogTo(Console.WriteLine, LogLevel.Information)
             );
 
