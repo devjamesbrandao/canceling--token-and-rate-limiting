@@ -1,3 +1,8 @@
+using System.Text;
+using Autentication.Core.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 namespace Autentication.API.Configuration
 {
     public static class AutenticationJWTConfig
@@ -34,12 +39,14 @@ namespace Autentication.API.Configuration
 
             return services;
         }
-    }
 
-    public static IApplicationBuilder UseAutenticationJWT(this IApplicationBuilder app)
-    {
-        app.UseAuthentication();
+        public static IApplicationBuilder UseAutenticationJWT(this IApplicationBuilder app)
+        {
+            app.UseAuthentication();
 
-        app.UseAuthorization();
+            app.UseAuthorization();
+
+            return app;
+        }
     }
 }
