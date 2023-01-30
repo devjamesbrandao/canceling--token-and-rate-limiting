@@ -1,29 +1,35 @@
+using System.Reflection;
+using Microsoft.OpenApi.Models;
+
 namespace Autentication.API.Configuration
 {
-    public static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
+    public static class SwaggerConfig
     {
-        services.AddSwaggerGen(c =>
-            {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "Cancelatin token and Rate Limit", Version = "v1" });
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-                x.IncludeXmlComments(xmlPath);
-            }
-        );
-
-        return services;
-    }
-
-    public static IApplicationBuilder UseSwaggerConfig(this IApplicationBuilder app)
-    {
-        if (app.Environment.IsDevelopment())
+        public static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
         {
-            app.UseSwagger();
+            services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cancelatin token and Rate Limit", Version = "v1" });
 
-            app.UseSwaggerUI();
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                    c.IncludeXmlComments(xmlPath);
+                }
+            );
+
+            return services;
+        }
+
+        public static IApplicationBuilder UseSwaggerConfig(this IApplicationBuilder app, IWebHostEnvironment environment)
+        {
+            if (environment.IsDevelopment())
+            {
+                app.UseSwagger();
+
+                app.UseSwaggerUI();
+            }
 
             return app;
         }
