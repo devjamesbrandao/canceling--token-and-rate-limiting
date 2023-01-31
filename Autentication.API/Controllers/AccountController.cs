@@ -24,34 +24,49 @@ namespace Autentication.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Checks if the user is logged in
         /// </summary>
         /// <remarks>
-        /// Exemplo de requisição:
+        /// Requisition example:
         /// 
         ///     [GET] v1/api/Account/account
         /// </remarks>
         /// <response code="200">
-        /// Funcionário está logado.
+        /// User is logged in.
         /// </response>   
         /// <response code="401">
-        /// Funcionário não está logado.
-        /// </response>   
-        /// <response code="500">
-        /// Erro inesperado na aplicação.
+        /// User is not logged in.
         /// </response>   
         [HttpGet("account")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [LimitRequests(MaxRequests = 5, TimeWindow = 1)]
+        [LimitRequests(MaxRequests = 5, TimeWindowInSeconds = 60)]
         public ActionResult<string> GetUser() => $"Hello, {User!.Identity!.Name}";
 
-        
+        /// <summary>
+        /// Sign up in the application
+        /// </summary>
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [POST] v1/api/Account/sign-up
+        ///     {        
+        ///       "Username": "Harry",
+        ///       "Password": "Potter"
+        ///     }
+        /// </remarks>
+        /// <param name="request"></param> 
+        /// <response code="400">
+        /// Possible errors: "Username can not be empty."; "Password can not be empty."; "Username 'Dumbledore' is already in use.";
+        /// </response>    
+        /// <response code="204">
+        /// Success sign up
+        /// </response>   
         [HttpPost("sign-up")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [LimitRequests(MaxRequests = 5, TimeWindow = 60)]
+        [LimitRequests(MaxRequests = 5, TimeWindowInSeconds = 60)]
         public async Task<IActionResult> SignUp([FromBody] UserModelView request)
         {
             await _accountService.SignUp(request.Username, request.Password);
@@ -60,38 +75,52 @@ namespace Autentication.API.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Sign in in the application
         /// </summary>
         /// <remarks>
-        /// Exemplo de requisição:
+        /// Requisition example:
         /// 
-        ///     [POST] v1/api/
+        ///     [POST] v1/api/Account/sign-in
         ///     {        
-        ///       "userName": "test"
+        ///       "Username": "Harry",
+        ///       "Password": "Potter"
         ///     }
         /// </remarks>
-        /// <param name="credenciais"></param> 
+        /// <param name="request"></param> 
         /// <response code="400">
-        /// Possíveis erros: "Usuário ou senha inválidos"; "Funcionário não possui codLoja cadastrado."; 
+        /// Possible errors: "Invalid username or password";
         /// </response>    
-        /// <response code="500">
-        /// Erro inesperado na aplicação 
+        /// <response code="200">
+        /// Success sign in 
         /// </response>   
         [HttpPost("sign-in")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(JsonWebToken), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [LimitRequests(MaxRequests = 5, TimeWindow = 1)]
+        [LimitRequests(MaxRequests = 5, TimeWindowInSeconds = 60)]
         public async Task<ActionResult<JsonWebToken>> SignIn([FromBody] UserModelView request)
         {
             return await _accountService.SignIn(request.Username, request.Password);
         }
 
-
-        [HttpPost("logout")]
+        /// <summary>
+        /// Application logout
+        /// </summary>
+        /// <remarks>
+        /// Requisition example:
+        /// 
+        ///     [DELETE] v1/api/Account/logout
+        /// </remarks>
+        /// <response code="401">
+        /// Unauthorized user
+        /// </response>    
+        /// <response code="204">
+        /// Success logout
+        /// </response>   
+        [HttpDelete("logout")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [LimitRequests(MaxRequests = 5, TimeWindow = 1)]
+        [LimitRequests(MaxRequests = 5, TimeWindowInSeconds = 60)]
         public IActionResult Logout()
         {
             _tokenManager.DeactivateCurrentToken();

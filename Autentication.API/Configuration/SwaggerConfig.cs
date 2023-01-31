@@ -9,13 +9,13 @@ namespace Autentication.API.Configuration
         {
             services.AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Cancelatin token and Rate Limit", Version = "v1" });
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Canceling JWT tokens in .net core and Rate Limit", Version = "v1" });
 
                     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
-                        Description = @"JWT Authorization header usando o padrão Bearer. \r\n\r\n 
-                                    Adicione 'Bearer' [espaço] e então seu token no input abaixo.
-                                    \r\n\r\nExemplo: 'Bearer 12345abcdef'",
+                        Description = @"JWT Authorization header using the Bearer pattern. \r\n\r\n 
+                                    Add 'Bearer' [space] and then its token in the input below.
+                                    \r\n\r\nExample: 'Bearer 12345abcdef'",
                         Name = "Authorization",
                         In = ParameterLocation.Header,
                         Type = SecuritySchemeType.ApiKey,

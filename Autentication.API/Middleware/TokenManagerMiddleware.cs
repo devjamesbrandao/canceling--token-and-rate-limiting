@@ -29,7 +29,7 @@ namespace Autentication.API.Middleware
                 if (
                     clientStatistics != null 
                     && 
-                    DateTime.UtcNow < clientStatistics.LastSuccessfulResponseTime.AddSeconds(decorator.TimeWindow) 
+                    DateTime.UtcNow < clientStatistics.LastSuccessfulResponseTime.AddSeconds(decorator.TimeWindowInSeconds) 
                     && 
                     clientStatistics.NumberOfRequestsCompletedSuccessfully == decorator.MaxRequests)
                 {
