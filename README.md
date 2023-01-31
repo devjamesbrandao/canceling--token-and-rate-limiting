@@ -6,6 +6,10 @@
     <img src="/Img/Canceling-tokens.png" alt="Application's swagger" title="Application's swagger">
 </p> 
 
+<p align="center">
+    <img src="/Img/too-many.png" alt="Too many requests" title="Too many requests">
+</p> 
+
 ### ` 💡 Covered topics`
 * .NET 7
 * SQL Lite
